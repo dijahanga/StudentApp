@@ -1,62 +1,91 @@
-
 fun main() {
 
-    // Create a mutable list to store all students entered by the user.
-    // Its type is Student, so it can hold both Undergraduate and Masters objects.
-    val students = mutableListOf<Student>()
+    // Step 4 - One University object that stores and manages all students
+    val university = University()
 
-    while (true) {
+    // Step 6 - String variable to store the user's menu choice
+    var choice = ""
 
-        // Display prompt and read the student's ID from console input
-        print("Enter student ID (or quit to stop): ")
-        val id = readln()
+    // Keep running until the user enters "4"
+    while (choice != "4") {
 
-        // Stop the loop when the user types "quit"
-        if (id == "quit") {
-            break
-        }
+        // Step 5 - Display the menu
+        println("===== Student Menu =====")
+        println("1. Add a student")
+        println("2. Search for student by ID")
+        println("3. Search for students by name")
+        println("4. Quit")
+        print("Enter your choice: ")
+        choice = readln().trim()
 
-        // Display prompt and read the student's name from console input
-        print("Enter student name: ")
-        val name = readln()
+        // Step 7 - Handle the menu options
+        when (choice) {
 
-        // Display prompt and read the course from console input
-        print("Enter course: ")
-        val course = readln()
+            "1" -> {
+                // Read student details
+                print("Enter student ID: ")
+                val id = readln()
 
-        // Display prompt and read the mark from console input
-        print("Enter mark: ")
-        val mark = readln().toDouble()
+                print("Enter student name: ")
+                val name = readln()
 
-        // Ask whether the student is Undergraduate or Masters
-        print("Is the student Undergraduate or Masters? (U/M): ")
-        val type = readln().trim().uppercase()
+                print("Enter course: ")
+                val course = readln()
 
-        // Create the appropriate object (Student is abstract, so it can't be created directly)
-        val student: Student = when (type) {
-            "U" -> Undergraduate(id, name, course, mark)
-            "M" -> Masters(id, name, course, mark)
-            else -> {
-                println("Invalid type - student not added.")
-                println()
-                continue   // skip back to the start of the loop
+                print("Enter mark: ")
+                val mark = readln().toDouble()
+
+                print("Is the student Undergraduate or Masters? (U/M): ")
+                val type = readln().trim().uppercase()
+
+                // Create the Student object (Student is abstract, so Undergraduate or Masters)
+                val student: Student? = when (type) {
+                    "U" -> Undergraduate(id, name, course, mark)
+                    "M" -> Masters(id, name, course, mark)
+                    else -> null
+                }
+
+                if (student == null) {
+                    println("Invalid type - student not added.")
+                } else {
+                    university.enrolStudent(student)
+                    println("Student enrolled.")
+                }
             }
+
+            "2" -> {
+                print("Enter student ID to search: ")
+                val id = readln()
+
+                val found = university.findStudentById(id)
+
+                if (found == null) {
+                    println("No student found with ID $id.")
+                } else {
+                    println(found)
+                }
+            }
+
+            "3" -> {
+                print("Enter student name to search: ")
+                val name = readln()
+
+                val results = university.findStudentsByName(name)
+
+                if (results.isEmpty()) {
+                    println("No students found with the name $name.")
+                } else {
+                    for (student in results) {
+                        println(student)
+                    }
+                }
+            }
+
+            "4" -> println("Program finished.")
+
+            else -> println("Invalid choice, please enter 1-4.")
         }
 
-        // Immediately add the new object to the list
-        students.add(student)
-
-        println("Student added.")
         println()
     }
-
-    // Second loop: go through the list and print each student.
-    // println(student) automatically calls toString().
-    println("All students entered:")
-    for (student in students) {
-        println(student)
-    }
-
-    // After the loop ends, display "Program finished"
-    println("Program finished.")
 }
