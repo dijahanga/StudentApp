@@ -12,7 +12,7 @@ abstract class Student(
     abstract fun getGrade(): String
 
     override fun toString(): String {
-        return "${studentType()} - Name: $name Course: $course Mark: $mark Grade: ${getGrade()}"
+        return "${studentType()} - id: $id Name: $name Course: $course Mark: $mark Grade: ${getGrade()}"
     }
 }
 
