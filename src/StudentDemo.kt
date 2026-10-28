@@ -1,15 +1,13 @@
 fun main() {
 
-    // Step 4 - One University object that stores and manages all students
+    // One University object that stores and manages all students
     val university = University()
 
-    // Step 6 - String variable to store the user's menu choice
+    // String variable to store the user's menu choice
     var choice = ""
 
-    // Keep running until the user enters "4"
     while (choice != "4") {
 
-        // Step 5 - Display the menu
         println("===== Student Menu =====")
         println("1. Add a student")
         println("2. Search for student by ID")
@@ -18,65 +16,69 @@ fun main() {
         print("Enter your choice: ")
         choice = readln().trim()
 
-        // Step 7 - Handle the menu options
         when (choice) {
 
+            // Step 4 - Option 1: Add a student (polymorphism)
             "1" -> {
-                // Read student details
+                // 1) Ask what type of student to add
+                print("Enter u for Undergraduate or m for Masters: ")
+                val type = readln().trim().lowercase()
+
+                if (type != "u" && type != "m") {
+                    println("Invalid type - student not added.")
+                } else {
+                    // 2) Read the common student information
+                    print("Enter student ID: ")
+                    val id = readln()
+
+                    print("Enter student name: ")
+                    val name = readln()
+
+                    print("Enter course: ")
+                    val course = readln()
+
+                    print("Enter mark: ")
+                    val mark = readln().toDouble()
+
+                    // 3) Create the correct object, stored in a variable of type Student
+                    val theStudent: Student = if (type == "u") {
+                        Undergraduate(id, name, course, mark)
+                    } else {
+                        Masters(id, name, course, mark)
+                    }
+
+                    // 4) Add the student to the university
+                    university.enrolStudent(theStudent)
+                    println("Student added.")
+                }
+            }
+
+            // Step 5 - Option 2: Search by ID
+            "2" -> {
                 print("Enter student ID: ")
                 val id = readln()
 
-                print("Enter student name: ")
-                val name = readln()
+                val foundStudent = university.findStudentById(id)
 
-                print("Enter course: ")
-                val course = readln()
-
-                print("Enter mark: ")
-                val mark = readln().toDouble()
-
-                print("Is the student Undergraduate or Masters? (U/M): ")
-                val type = readln().trim().uppercase()
-
-                // Create the Student object (Student is abstract, so Undergraduate or Masters)
-                val student: Student? = when (type) {
-                    "U" -> Undergraduate(id, name, course, mark)
-                    "M" -> Masters(id, name, course, mark)
-                    else -> null
-                }
-
-                if (student == null) {
-                    println("Invalid type - student not added.")
+                if (foundStudent != null) {
+                    println(foundStudent)
                 } else {
-                    university.enrolStudent(student)
-                    println("Student enrolled.")
+                    println("Student not found.")
                 }
             }
 
-            "2" -> {
-                print("Enter student ID to search: ")
-                val id = readln()
-
-                val found = university.findStudentById(id)
-
-                if (found == null) {
-                    println("No student found with ID $id.")
-                } else {
-                    println(found)
-                }
-            }
-
+            // Step 6 - Option 3: Search by name
             "3" -> {
-                print("Enter student name to search: ")
+                print("Enter student name: ")
                 val name = readln()
 
                 val results = university.findStudentsByName(name)
 
                 if (results.isEmpty()) {
-                    println("No students found with the name $name.")
+                    println("No students found.")
                 } else {
-                    for (student in results) {
-                        println(student)
+                    for (foundStudent in results) {
+                        println(foundStudent)
                     }
                 }
             }
