@@ -1,3 +1,7 @@
+// Undergraduate.kt
+// Subclass of Student. The ": Student(...)" part means "inherits from Student"
+// and passes the four values up to the Student constructor.
+
 class Undergraduate(
     id: String,
     name: String,
@@ -5,6 +9,11 @@ class Undergraduate(
     mark: Double
 ) : Student(id, name, course, mark) {
 
+    override fun studentType(): String {
+        return "Undergraduate"
+    }
+
+    // Undergraduate pass mark is 40
     override fun getGrade(): String {
         return when {
             mark >= 70 -> "Distinction"
@@ -12,10 +21,5 @@ class Undergraduate(
             mark >= 40 -> "Pass"
             else -> "Fail"
         }
-    }
-
-    // Subclass version: reuses the superclass details and adds Undergraduate-specific info
-    override fun toString(): String {
-        return "[Undergraduate] " + super.toString() + " Grade: ${getGrade()} (pass mark 40)"
     }
 }

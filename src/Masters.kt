@@ -1,3 +1,6 @@
+// Masters.kt
+// Subclass of Student with its own grading rules.
+
 class Masters(
     id: String,
     name: String,
@@ -5,6 +8,11 @@ class Masters(
     mark: Double
 ) : Student(id, name, course, mark) {
 
+    override fun studentType(): String {
+        return "Masters"
+    }
+
+    // Masters pass mark is 50
     override fun getGrade(): String {
         return when {
             mark >= 70 -> "Distinction"
@@ -12,10 +20,5 @@ class Masters(
             mark >= 50 -> "Pass"
             else -> "Fail"
         }
-    }
-
-    // Subclass version: reuses the superclass details and adds Masters-specific info
-    override fun toString(): String {
-        return "[Masters] " + super.toString() + " Grade: ${getGrade()} (pass mark 50)"
     }
 }
